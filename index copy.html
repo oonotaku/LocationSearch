@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>住所検索</title>
+    <script async src="https://maps.googleapis.com/maps/api/js?key="私のAPIキー"=places&callback=initAutocomplete">
+    </script>
+</head>
+
+<body>
+    <h1>住所検索窓</h1>
+    <input id="search-box" type="text" placeholder="住所を入力してください" style="width: 400px; height: 30px;">
+    <ul id="results" style="list-style-type: none; padding: 0; margin-top: 10px;"></ul>
+
+    <script>
+        function initAutocomplete() {
+            const input = document.getElementById("search-box");
+            const autocomplete = new google.maps.places.Autocomplete(input, {
+                types: ["geocode"],
+                componentRestrictions: { country: "jp" },
+            });
+
+            autocomplete.addListener("place_changed", () => {
+                const place = autocomplete.getPlace();
+                console.log("Selected place:", place);
+            });
+
+            autocomplete.addListener("place_changed", () => {
+                const place = autocomplete.getPlace();
+                document.getElementById("results").innerHTML = `
+        <li>住所: ${place.formatted_address}</li>
+        <li>緯度: ${place.geometry.location.lat()}</li>
+        <li>経度: ${place.geometry.location.lng()}</li>
+    `;
+            });
+
+        }
+
+        document.addEventListener("DOMContentLoaded", initAutocomplete);
+    </script>
+</body>
+
+</html>
